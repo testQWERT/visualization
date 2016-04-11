@@ -1,13 +1,19 @@
-function [ ] = visualRelation( relationsPa,relationsPe,distForGroup,peopleNumA,peopleNumB,imgSetA,imgSetB)
+function [ ] = visualRelation( distForGroup,peopleNumA,peopleNumB,imgSetA,imgSetB)
 %UNTITLED Summary of this function goes here
-%Ê¹ÓÃËµÃ÷£¬°ÑÏÂ·½´úÂë¸´ÖÆµ½ÃüÁî´°¿ÚÖÐÔËÐÐ£¬È»ºó¸ãÒ»ÏÂ¡£
+%ä½¿ç”¨è¯´æ˜Žï¼ŒæŠŠä¸‹æ–¹ä»£ç å¤åˆ¶åˆ°å‘½ä»¤çª—å£ä¸­è¿è¡Œï¼Œç„¶åŽæžä¸€ä¸‹ã€‚
 %load('../peopleNum.mat');load('../data/imgSet')visualRelation( relations,distForGroup,distForGroupT,peopleNumA,peopleNumB,imgSetA,imgSetB)
 % global relations;
 % global dist;
 % load('peopleNum.mat');
 % load('imgSet2.mat');
-% imA°üÀ¨pic,no,person,feature,edgefeat,wN,wE¡£person°üÀ¨patchNum,data{n,2}£¬num£¬patch{n,pN,2},patchfeature{n,pN},feature{n}
-%distForGroup{1,1}ÊÇpatch·ÖÅäÔª°û,{1,2}ÊÇpatchÏàËÆ¶È¾ØÕó,{2,1}ÊÇÈË·ÖÅäÔª°û,{2,2}ÊÇÈËÏàËÆ¶È¾ØÕó
+% imAåŒ…æ‹¬pic,no,person,feature,edgefeat,wN,wEã€‚personåŒ…æ‹¬patchNum,data{n,2}ï¼Œnumï¼Œpatch{n,pN,2},patchfeature{n,pN},feature{n}
+%distForGroup{1,1}æ˜¯patchåˆ†é…å…ƒèƒž,{1,2}æ˜¯patchç›¸ä¼¼åº¦çŸ©é˜µ,{2,1}æ˜¯äººåˆ†é…å…ƒèƒž,{2,2}æ˜¯äººç›¸ä¼¼åº¦çŸ©é˜µ
+%%%
+relationsPa=distForGroup{1,1};
+relationsPe=distForGroup{2,1};
+distForGroup=distForGroup{1,2};
+%%%
+
 groupNum=162;
 option=1;
 peopleNumA2=peopleNumA;peopleNumA2(1)=0;
@@ -16,11 +22,11 @@ addpath('../');
 pN=imgSetA{1,1}.person.patchNum;
 hh=0;ww=0;
 for i=2:size(peopleNumA,2)
-    peopleNumA2(i)=peopleNumA2(i-1)+peopleNumA(i-1);%peopleNumA2ÖÐÃ¿¸öÔªËØ´¢´æµÄÊÇÇ°ÃæÒÑ¾­ÓÐÁË¶àÉÙ¸öÈË
+    peopleNumA2(i)=peopleNumA2(i-1)+peopleNumA(i-1);%peopleNumA2ä¸­æ¯ä¸ªå…ƒç´ å‚¨å­˜çš„æ˜¯å‰é¢å·²ç»æœ‰äº†å¤šå°‘ä¸ªäºº
     peopleNumB2(i)=peopleNumB2(i-1)+peopleNumB(i-1);
 end
 countera=1;counterb=1;
-[value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+[value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
 global fig;
 global haxis;
 fig=figure(10);
@@ -45,14 +51,14 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
                 countera=1;
             end
             counterb=1;
-            [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+            [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
             aID=countera;bID=idx(counterb);
             wNBlank=zeros(1,imgSetA{1,aID}.person.patchNum*imgSetA{1,aID}.person.num);
             wEBlank=zeros(1,nchoosek(imgSetA{1,aID}.person.num,2)*pN^2);
         elseif strcmp(evt.Key,'downarrow')
             countera=countera+1;
             counterb=1;
-            [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+            [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
             aID=countera;bID=idx(counterb);
             wNBlank=zeros(1,imgSetA{1,aID}.person.patchNum*imgSetA{1,aID}.person.num);
             wEBlank=zeros(1,nchoosek(imgSetA{1,aID}.person.num,2)*pN^2);
@@ -77,7 +83,7 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
         elseif strcmp(evt.Key,'3')
             counterb=3;
             bID=idx(counterb);
-        elseif strcmp(evt.Key,'l')%°´L£¬ÔÚÏÔÊ¾ÏßºÍÏÔÊ¾È¨ÖµÖ®¼äÇÐ»»
+        elseif strcmp(evt.Key,'l')%æŒ‰Lï¼Œåœ¨æ˜¾ç¤ºçº¿å’Œæ˜¾ç¤ºæƒå€¼ä¹‹é—´åˆ‡æ¢
             option=1+option;
             if option==3   
                 wNBlank=zeros(1,pN*imgSetA{1,aID}.person.num);
@@ -101,7 +107,7 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
                     [relationsPa{aID,j},relationsPe{aID,j},distForGroup(aID,j),~]...
                         =calcuMatch( imgSetA{1,aID}.feature,imgSetB{1,j}.feature,imgSetA{1,aID}.edgefeat,imgSetB{1,j}.edgefeat,imgSetA{1,aID}.wN,imgSetA{1,aID}.wE,1,'eig',imgSetA{1,1}.person.patchNum);
                 end
-                [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+                [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
             elseif strcmp(evt.Key,'s')
                 for kk=1:imgSetA{1,aID}.person.patchNum*imgSetA{1,aID}.person.num
                     if wNBlank(kk)==1
@@ -112,14 +118,14 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
                     [relationsPa{aID,j},relationsPe{aID,j},distForGroup(aID,j),~]...
                         =calcuMatch( imgSetA{1,aID}.feature,imgSetB{1,j}.feature,imgSetA{1,aID}.edgefeat,imgSetB{1,j}.edgefeat,imgSetA{1,aID}.wN,imgSetA{1,aID}.wE,1,'eig',imgSetA{1,1}.person.patchNum);
                 end
-                [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+                [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
             elseif strcmp(evt.Key,'x')
                 imgSetA{1,aID}.wN(:,:)=ones(size(imgSetA{1,aID}.wN,1),size(imgSetA{1,aID}.wN,2));
                 for j=1:groupNum
                     [relationsPa{aID,j},relationsPe{aID,j},distForGroup(aID,j),~]...
                         =calcuMatch( imgSetA{1,aID}.feature,imgSetB{1,j}.feature,imgSetA{1,aID}.edgefeat,imgSetB{1,j}.edgefeat,imgSetA{1,aID}.wN,imgSetA{1,aID}.wE,1,'eig',imgSetA{1,1}.person.patchNum);
                 end
-                [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+                [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
                 wNBlank=zeros(1,pN*imgSetA{1,aID}.person.num);
                 wEBlank=zeros(1,nchoosek(imgSetA{1,aID}.person.num,2)*pN^2);
             end
@@ -134,7 +140,7 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
                     [relationsPa{aID,j},relationsPe{aID,j},distForGroup(aID,j),~]...
                         =calcuMatch( imgSetA{1,aID}.feature,imgSetB{1,j}.feature,imgSetA{1,aID}.edgefeat,imgSetB{1,j}.edgefeat,imgSetA{1,aID}.wN,imgSetA{1,aID}.wE,1,'eig',imgSetA{1,1}.person.patchNum);
                 end
-                [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+                [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
             elseif strcmp(evt.Key,'s')
                 for kk=1:nchoosek(imgSetA{1,aID}.person.num,2)*pN^2
                     if wEBlank(kk)==1
@@ -145,14 +151,14 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
                     [relationsPa{aID,j},relationsPe{aID,j},distForGroup(aID,j),~]...
                         =calcuMatch( imgSetA{1,aID}.feature,imgSetB{1,j}.feature,imgSetA{1,aID}.edgefeat,imgSetB{1,j}.edgefeat,imgSetA{1,aID}.wN,imgSetA{1,aID}.wE,1,'eig',imgSetA{1,1}.person.patchNum);
                 end
-                [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+                [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
             elseif strcmp(evt.Key,'x')
                 imgSetA{1,aID}.wE(:,:)=ones(size(imgSetA{1,aID}.wE,1),size(imgSetA{1,aID}.wE,2));
                 for j=1:groupNum
                     [relationsPa{aID,j},relationsPe{aID,j},distForGroup(aID,j),~]...
                         =calcuMatch( imgSetA{1,aID}.feature,imgSetB{1,j}.feature,imgSetA{1,aID}.edgefeat,imgSetB{1,j}.edgefeat,imgSetA{1,aID}.wN,imgSetA{1,aID}.wE,1,'eig',imgSetA{1,1}.person.patchNum);
                 end
-                [value,idx] = sort(distForGroup(countera,:),'ascend');%ÖñÅÅÅÅÐò
+                [value,idx] = sort(distForGroup(countera,:),'ascend');%ç«¹æŽ’æŽ’åº
                 wNBlank=zeros(1,pN*imgSetA{1,aID}.person.num);
                 wEBlank=zeros(1,nchoosek(imgSetA{1,aID}.person.num,2)*pN^2);
             end
@@ -164,7 +170,7 @@ set(fig,'WindowKeyPressFcn',@keypressfcn,'WindowKeyReleaseFcn',@keyreleasefcn);
     function click_ceshi(src, event)
         xy = get(fig, 'CurrentPoint');
         %set(gca, 'Unit','Pixel');
-        %sizeGca=get(gca, 'position');%gcaµÄ¸ßÓÀÔ¶ÓëfigureÒ»Ñù£¬
+        %sizeGca=get(gca, 'position');%gcaçš„é«˜æ°¸è¿œä¸Žfigureä¸€æ ·ï¼Œ
         sizeFig=get(fig, 'position');
         xy(2)=sizeFig(4)-xy(2);
         if (sizeFig(4)/hh)>(sizeFig(3)/ww)
